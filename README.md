@@ -8,7 +8,7 @@ This repository contains SQL scripts and queries aimed at simplifying data explo
 - **Data Cleaning:** Scripts addressing missing values, duplicates, deleting columns, and inconsistencies in data for improved accuracy.
 
 ## Usage
-Clone the repository: git clone https://github.com/ChisomNwosu/PortfolioProject.git
+Clone the repository: git clone https://github.com/ChisomNwosu/PortfolioProjects
 
 
 ## Get in Touch
