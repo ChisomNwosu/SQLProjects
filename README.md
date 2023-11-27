@@ -7,6 +7,8 @@ This repository contains SQL scripts and queries aimed at simplifying data explo
 - **Data Exploration:** SQL queries to analyze COVID-19 datasets, derive insights, and summarize key statistics as regards to its region, total case vs death case, death count by continent, countries infection rate and death rate by population.  
 - **Data Cleaning:** Scripts addressing missing values, duplicates, deleting columns, and inconsistencies in data for improved accuracy.
 
+## Usage
+Clone the repository: git clone https://github.com/ChisomNwosu/PortfolioProject.git
 
 
 ## Get in Touch
