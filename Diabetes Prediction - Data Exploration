@@ -1,0 +1,145 @@
+select *
+from DiabetesPredictionProject..Dataset$
+
+
+
+--.1 Retrieve the Patient_id and ages of all patients
+
+SELECT Patient_id, Age
+FROM DiabetesPredictionProject..Dataset$;
+
+
+-- 2. Select all female patients who are older than 40. 
+SELECT *
+FROM DiabetesPredictionProject..Dataset$
+WHERE Gender = 'Female' AND Age > 40;
+
+-- 3. Calculate the average BMI of patients.
+
+SELECT AVG(BMI) AS AverageBMI
+FROM DiabetesPredictionProject..Dataset$;
+
+
+-- 4. List patients in descending order of blood glucose levels
+
+SELECT *
+FROM DiabetesPredictionProject..Dataset$
+ORDER BY [blood_glucose_level] DESC;
+
+
+-- 5. Find patients who have hypertension and diabetes.
+SELECT *
+FROM DiabetesPredictionProject..Dataset$
+WHERE Hypertension = 1 AND Diabetes = 1;
+
+-- 6. Determine the number of patients with heart disease
+
+SELECT COUNT(*) AS NumberOfPatientsWithHeartDisease
+FROM DiabetesPredictionProject..Dataset$
+WHERE [heart_disease] = 1;
+
+--7. Group patients by smoking history and count how many smokers and non-smokers there are.
+
+SELECT [Smoking_History], COUNT(*) AS NumberOfPatients
+FROM DiabetesPredictionProject..Dataset$
+GROUP BY [smoking_history];
+
+
+-- 8. Retrieve the Patient_ids of patients who have a BMI greater than the average BM
+
+SELECT Patient_ID
+FROM DiabetesPredictionProject..Dataset$
+WHERE bmi > (SELECT AVG(bmi) FROM DiabetesPredictionProject..Dataset$);
+
+-- 9.find the patient with the highest HbA1c level and the patient with the lowest HbA1clevel.
+SELECT TOP 1 WITH TIES
+    Patient_id
+    [HBA1C_level]
+FROM DiabetesPredictionProject..Dataset$
+ORDER BY [HBA1C_level] DESC;
+
+-- Patient with the lowest HbA1c level
+SELECT TOP 1 WITH TIES
+    Patient_id
+    [HBA1C_level]
+FROM DiabetesPredictionProject..Dataset$
+ORDER BY [HBA1C_level] ASC;
+
+
+ 
+
+-- 10. Calculate the age of patients in years (assuming the current date as of now)
+
+SELECT
+    Patient_ID,
+    [EmployeeName],
+    Gender,
+    Age,
+    DATEADD(YEAR, -Age, GETDATE()) AS EstimatedBirthdate,
+    DATEDIFF(YEAR, DATEADD(YEAR, -Age, GETDATE()), GETDATE()) AS EstimatedAge
+	FROM DiabetesPredictionProject..Dataset$;
+
+select *
+from DiabetesPredictionProject..Dataset$
+
+-- 11. Rank patients by blood glucose level within each gender group
+
+SELECT
+    Patient_ID,
+    [EmployeeName],
+    Gender,
+    [Age],
+    Hypertension,
+    [Heart_Disease],
+    [Smoking_History],
+    BMI,
+    [Blood_Glucose_Level],
+    Diabetes,
+    [HBA1C_Level],
+    RANK() OVER (PARTITION BY Gender ORDER BY [Blood_Glucose_Level] DESC) AS GlucoseLevelRank
+FROM DiabetesPredictionProject..Dataset$;
+
+--12. Update the smoking history of patients who are older than 50 to "Ex-smoker."
+UPDATE DiabetesPredictionProject..Dataset$
+SET [smoking_history] = 'Ex-smoker'
+WHERE Age > 50;
+
+--13. Insert a new patient into the database with sample data.
+
+INSERT INTO DiabetesPredictionProject..Dataset$ (EmployeeName, Patient_id, gender, age, hypertension, heart_disease, smoking_history,bmi,
+HbA1c_level, blood_glucose_level, diabetes)
+VALUES
+('james bond', 'PT100', 'male', 50, 0, 1, 'Ex-smoker', 22.1, 6.0, 70, 1);
+
+
+--14. Delete all patients with heart disease from the database.
+
+DELETE FROM DiabetesPredictionProject..Dataset$
+WHERE [heart_disease]=1;
+
+
+-- 15. Find patients who have hypertension but not diabetes using the EXCEPT operator
+SELECT Patient_id,EmployeeName from DiabetesPredictionProject..Dataset$
+WHERE Hypertension = 1
+
+EXCEPT
+
+SELECT Patient_id,employeeName from DiabetesPredictionProject..Dataset$
+WHERE Diabetes = 0 
+
+
+-- 16. Define a unique constraint on the "patient_id" column to ensure its values are unique.
+
+ALTER TABLE DiabetesData
+ADD CONSTRAINT UC_PatientID UNIQUE (patient_id);
+
+
+-- 17.  Create a view that displays the Patient_ids, ages, and BMI of patients
+
+CREATE VIEW PatientInfoView
+AS
+SELECT Patient_id, age, bmi
+FROM DiabetesPredictionProject..Dataset$;
+
+SELECT * FROM PatientInfoView;
+
